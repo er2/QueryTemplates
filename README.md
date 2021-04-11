@@ -125,4 +125,9 @@ query credit: https://blog.jooq.org/2020/05/05/using-sql-server-for-xml-and-for-
   * flatten?
 * Parse template for used parameters
 * Validate API endpoint spec against template parameters (subset)
+* Validate api spec against actual returned results (warning when running in dev mode is probably fine, static analysis probably overkill)
 * build container image from Query Template
+
+## Ideas for version 2.0
+
+* External result mapping for a query language such as ksql that doesn't define its own result mapping
