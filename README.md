@@ -129,6 +129,7 @@ query credit: https://blog.jooq.org/2020/05/05/using-sql-server-for-xml-and-for-
 * Validate API endpoint spec against template parameters (subset)
 * Validate api spec against actual returned results (warning when running in dev mode is probably fine, static analysis probably overkill)
 * build container image from Query Template
+* IDE support
 
 ## Ideas for version 2.0
 
