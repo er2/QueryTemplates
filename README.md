@@ -6,7 +6,9 @@ The following ingredients ought to be sufficient for defining a serverless funct
 1. The expected input, in the form of OpenAPI, JSON Schema, OData, XSD etc.
 2. A database query
 3. A templating system such as Slick
-4. Database result to XML/JSON mapping, as defined by the SQL specification
+4. Database result to XML/JSON mapping, as defined by the [SQL](https://en.wikipedia.org/wiki/SQL/XML) [specification](https://en.wikipedia.org/wiki/SQL:2016)
+
+This example should speak for itself:
 
 ```yaml
 swagger: "2.0"
@@ -119,3 +121,17 @@ which will return
 
 query credit: https://blog.jooq.org/2020/05/05/using-sql-server-for-xml-and-for-json-syntax-on-other-rdbms-with-jooq/
 
+## Design questions
+
+* Keep endpoint spec and query in the same file? (Template language is the host language, api spec lives in a comment)
+  * Pro: files change together, convenience of passing around a single file, easier for tooling to validate
+  * Con: Harder for typical tooling to work with. A full IDE like IntelliJ can do language injection, but basic text editors or code review tools don't
+
+## Implementation TODOs
+
+* Parse API endpoint spec for available parameters
+* Create canonical format for available parameters: URI path + URI query params + JSON/XML in POST request body ?
+  * flatten?
+* Parse template for used parameters
+* Validate API endpoint spec against template parameters (subset)
+* build container image from Query Template
