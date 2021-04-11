@@ -8,6 +8,8 @@ The following ingredients ought to be sufficient for defining a serverless funct
 3. A templating system such as Slick
 4. Database result to XML/JSON mapping, as defined by the [SQL](https://en.wikipedia.org/wiki/SQL/XML) [specification](https://en.wikipedia.org/wiki/SQL:2016)
 
+No general purpose backend language should be necessary.
+
 This example should speak for itself:
 
 ```yaml
