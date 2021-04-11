@@ -16,19 +16,10 @@ info:
   description: "A serverless function for looking up who has acted in a given film"
   version: "1.0.0"
   title: "Actor Lookup"
-basePath: "/v1"
-tags:
-- name: "actor"
-schemes:
-- "https"
 paths:
   /actors/{film}:
     get:
-      tags:
-      - "actor"
       summary: "Finds actors by film"
-      description: "Multiple status values can be provided with comma separated strings"
-      operationId: "findActorsByFilm"
       produces:
       - "application/json"
       parameters:
