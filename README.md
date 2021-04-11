@@ -1,2 +1,121 @@
-# QueryTemplates
-proposal for a new class of cloud service
+# Query Templates
+a new class of cloud service
+
+The following ingredients ought to be sufficient for defining a serverless function
+
+1. The expected input, in the form of OpenAPI, JSON Schema, OData, XSD etc.
+2. A database query
+3. A templating system such as Slick
+4. Database result to XML/JSON mapping, as defined by the SQL specification
+
+```yaml
+swagger: "2.0"
+info:
+  description: "A serverless function for looking up who has acted in a given film"
+  version: "1.0.0"
+  title: "Actor Lookup"
+basePath: "/v1"
+tags:
+- name: "actor"
+schemes:
+- "https"
+paths:
+  /actors/{film}:
+    get:
+      tags:
+      - "actor"
+      summary: "Finds actors by film"
+      description: "Multiple status values can be provided with comma separated strings"
+      operationId: "findActorsByFilm"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "film"
+        in: "path"
+        description: "film name"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Actor"
+        "400":
+          description: "Invalid film"
+definitions:
+  Actor:
+    type: "object"
+    properties:
+      first_name:
+        type: "string"
+      last_name:
+        type: "string"
+      f:
+        $ref: "#/definitions/Films"
+  Films:
+    type: array
+    items:
+      $ref: "#/definitions/Film"
+  Film:
+    type: object
+    properties:
+      title:
+        type: "string"
+```
+
+```sql
+SELECT JSON_ARRAYAGG(JSON_OBJECT(
+  KEY 'actor' VALUE JSON_OBJECT(
+    KEY 'first_name' VALUE actor.first_name,
+    KEY 'last_name' VALUE actor.last_name
+  ),
+  KEY 'TITLE' VALUE title
+  ABSENT ON NULL
+))
+FROM (
+  SELECT
+    a.first_name AS "actor.first_name", 
+    a.last_name AS "actor.last_name", 
+    f.title
+  FROM actor a
+  JOIN film_actor fa ON a.actor_id = fa.actor_id
+  JOIN film f ON fa.film_id = f.film_id
+  WHERE f.name = $film
+  ORDER BY 1, 2, 3
+) t
+```
+
+which will return
+```json
+[
+    {
+        "first_name": "NICK",
+        "last_name": "WAHLBERG",
+        "f": [
+            {
+                "title": "SMILE EARRING"
+            },
+            {
+                "title": "WARDROBE PHANTOM"
+            }
+        ]
+    },
+    {
+        "first_name": "PENELOPE",
+        "last_name": "GUINESS",
+        "f": [
+            {
+                "title": "ACADEMY DINOSAUR"
+            },
+            {
+                "title": "ANACONDA CONFESSIONS"
+            }
+        ]
+    }
+]
+```
+
+query credit: https://blog.jooq.org/2020/05/05/using-sql-server-for-xml-and-for-json-syntax-on-other-rdbms-with-jooq/
+
