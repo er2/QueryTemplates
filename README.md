@@ -5,7 +5,7 @@ The following ingredients ought to be sufficient for defining a serverless funct
 
 1. The expected input, in the form of OpenAPI, JSON Schema, OData, XSD etc.
 2. A database query
-3. A templating system such as Slick
+3. A templating system such as from an ORM like Slick
 4. Database result to XML/JSON mapping, as defined by the [SQL](https://en.wikipedia.org/wiki/SQL/XML) [specification](https://en.wikipedia.org/wiki/SQL:2016)
 
 No general purpose backend language should be necessary.
@@ -127,7 +127,7 @@ query credit: https://blog.jooq.org/2020/05/05/using-sql-server-for-xml-and-for-
   * flatten?
 * Parse template for used parameters
 * Validate API endpoint spec against template parameters (subset)
-* Validate api spec against actual returned results (warning when running in dev mode is probably fine, static analysis probably overkill)
+* Validate API spec against actual returned results (warning when running in dev mode is probably fine, static analysis probably overkill)
 * build container image from Query Template
 * IDE support
 
